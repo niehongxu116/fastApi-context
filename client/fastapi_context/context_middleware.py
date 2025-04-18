@@ -7,8 +7,8 @@ from starlette_context import request_cycle_context
 from starlette_context.middleware import RawContextMiddleware
 from starlette_context.errors import ConfigurationError
 
-from fastAPi_context.config import ContextConfig
-from fastAPi_context.exceptions import ContextMiddlewareError
+from fastapi_context.config import ContextConfig
+from fastapi_context.exceptions import ContextMiddlewareError
 
 
 class FastAPiContextMiddleware(RawContextMiddleware):

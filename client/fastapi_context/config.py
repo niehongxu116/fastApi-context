@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from starlette.responses import Response, JSONResponse, PlainTextResponse
 from starlette_context.plugins import Plugin
 
-from fastAPi_context.exceptions import ContextMiddlewareError
+from fastapi_context.exceptions import ContextMiddlewareError
 
 
 class JsonResponseConfig(BaseModel):

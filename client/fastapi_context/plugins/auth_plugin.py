@@ -13,8 +13,8 @@ from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 from starlette.types import Message
 
-from fastAPi_context.config import ContextConfig, AuthPluginConfig, JWTAuthPluginConfig, RedisAuthPluginConfig
-from fastAPi_context.exceptions import ContextMiddlewareError
+from fastapi_context.config import ContextConfig, AuthPluginConfig, JWTAuthPluginConfig, RedisAuthPluginConfig
+from fastapi_context.exceptions import ContextMiddlewareError
 
 
 class AuthPlugin(Plugin):
