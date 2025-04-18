@@ -15,3 +15,8 @@ class ContextMiddlewareError(Exception):
         self.error_code = error_code
         self.data = data
         self.message = message
+
+
+class ContextMiddlewareConfigError(ContextMiddlewareError):
+    def __init__(self, message: str = "ContextMiddlewareConfig Error"):
+        super().__init__(message=message)

@@ -14,7 +14,7 @@ from starlette.responses import Response
 from starlette.types import Message
 
 from fastapi_context.config import ContextConfig, AuthPluginConfig, JWTAuthPluginConfig, RedisAuthPluginConfig
-from fastapi_context.exceptions import ContextMiddlewareError
+from fastapi_context.exceptions import ContextMiddlewareConfigError, ContextMiddlewareError
 
 
 class AuthPlugin(Plugin):
@@ -100,13 +100,13 @@ class RedisAuthPlugin(AuthPlugin):
 
     def __init__(self, auth_plugin_config: RedisAuthPluginConfig):
         if auth_plugin_config.redis_client_function and not callable(auth_plugin_config.redis_client_function):
-            raise ContextMiddlewareError(
+            raise ContextMiddlewareConfigError(
                 status_code=auth_plugin_config.error_status_code,
                 error_code=auth_plugin_config.code,
                 message="redis client must be callable",
             )
         if not auth_plugin_config.redis_config and not auth_plugin_config.redis_client_function:
-            raise ContextMiddlewareError(
+            raise ContextMiddlewareConfigError(
                 status_code=auth_plugin_config.error_status_code,
                 error_code=auth_plugin_config.code,
                 message="redis config is required",

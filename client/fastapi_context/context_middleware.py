@@ -8,7 +8,7 @@ from starlette_context.middleware import RawContextMiddleware
 from starlette_context.errors import ConfigurationError
 
 from fastapi_context.config import ContextConfig
-from fastapi_context.exceptions import ContextMiddlewareError
+from fastapi_context.exceptions import ContextMiddlewareConfigError, ContextMiddlewareError
 
 
 class FastAPiContextMiddleware(RawContextMiddleware):
@@ -17,7 +17,7 @@ class FastAPiContextMiddleware(RawContextMiddleware):
         self.app = app
         self.context_config = context_config
         if not isinstance(self.context_config, ContextConfig):
-            raise ConfigurationError(
+            raise ContextMiddlewareConfigError(
                 f"app.fastapi_context_config is not a valid instance"
             )
         self.plugins = self.context_config.plugins
