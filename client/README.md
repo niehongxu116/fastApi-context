@@ -1,0 +1,1 @@
+# Auth check and more plugins for fastApi
