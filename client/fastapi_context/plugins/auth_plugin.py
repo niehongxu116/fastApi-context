@@ -101,14 +101,10 @@ class RedisAuthPlugin(AuthPlugin):
     def __init__(self, auth_plugin_config: RedisAuthPluginConfig):
         if auth_plugin_config.redis_client_function and not callable(auth_plugin_config.redis_client_function):
             raise ContextMiddlewareConfigError(
-                status_code=auth_plugin_config.error_status_code,
-                error_code=auth_plugin_config.code,
                 message="redis client must be callable",
             )
         if not auth_plugin_config.redis_config and not auth_plugin_config.redis_client_function:
             raise ContextMiddlewareConfigError(
-                status_code=auth_plugin_config.error_status_code,
-                error_code=auth_plugin_config.code,
                 message="redis config is required",
             )
         super().__init__(auth_plugin_config=auth_plugin_config)
