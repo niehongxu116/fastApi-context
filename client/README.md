@@ -19,7 +19,7 @@ provide SDK in the following programming languages:
     ```py
     from fastapi import FastAPI
 
-   app = FastAPI()
+    app = FastAPI()
 
     ```
 
