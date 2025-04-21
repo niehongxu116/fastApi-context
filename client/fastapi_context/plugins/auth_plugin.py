@@ -37,6 +37,15 @@ class AuthPlugin(Plugin):
         """Runs always on response."""
         ...
 
+    async def format_user_info(self, user_info: Any) -> Any:
+        """Format user info"""
+        if self.auth_plugin_config.user_class:
+            if isinstance(user_info, self.auth_plugin_config.user_class):
+                return user_info
+            elif isinstance(user_info, dict):
+                return self.auth_plugin_config.user_class(**user_info)
+        return user_info
+
     async def process_request(
         self, request: Union[Request, HTTPConnection]
     ) -> Optional[Any]:
@@ -50,7 +59,7 @@ class AuthPlugin(Plugin):
                 error_code=self.auth_plugin_config.code,
                 message="user not found",
             )
-        return user_info
+        return await self.format_user_info(user_info=user_info)
 
     async def get_token(self, request: Request) -> str:
         if isinstance(self.auth_plugin_config.get_token, str):

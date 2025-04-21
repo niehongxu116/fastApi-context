@@ -38,6 +38,7 @@ class AuthPluginConfig(BaseModel):
     """
     url_white_list: list = Field(default=[], title="url white list")
     key: str = Field(default="auth", min_length=1, title="context key")
+    user_class: Optional[Any] = Field(default=None, title="user class")
     get_token: Union[str, Callable]
     error_status_code: int = Field(default=200, title="http status code")
     code: int = Field(default=-1, title="error code")

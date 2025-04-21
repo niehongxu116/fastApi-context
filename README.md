@@ -36,6 +36,7 @@ provide SDK in the following programming languages:
                auth_plugin_config=JWTAuthPluginConfig(
                key="jwt payload key in context",
                url_white_list=["url white list"],
+               user_class=None,  # user class for decode jwt payload
                get_token="token",  # get jwt token way, value is string or callable
                jwt_secret="Your App Jwt secret",
                jwt_algorithms=["HS256"],  # Your App Jwt algorithms
@@ -53,6 +54,7 @@ provide SDK in the following programming languages:
                 auth_plugin_config=RedisAuthPluginConfig(
                 key="redis payload key in context",
                 url_white_list=["url white list"],
+                user_class=None,  # user class for decode jwt payload
                 get_token="token",  # get jwt token way, value is string or callable
                 redis_token_key_prefix="your redis token key prefix",
                 # config redis client
