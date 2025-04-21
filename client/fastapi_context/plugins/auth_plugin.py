@@ -42,7 +42,7 @@ class AuthPlugin(Plugin):
         if self.auth_plugin_config.user_class:
             if isinstance(user_info, self.auth_plugin_config.user_class):
                 return user_info
-            elif isinstance(user_info, dict):
+            elif isinstance(user_info, dict) and self.auth_plugin_config.user_class is not None:
                 return self.auth_plugin_config.user_class(**user_info)
         return user_info
 
@@ -92,7 +92,6 @@ class JwtAuthPlugin(AuthPlugin):
             payload = jwt.decode(
                 token, self.auth_plugin_config.jwt_secret, algorithms=self.auth_plugin_config.jwt_algorithms
             )
-            # todo format user schema
             return payload["payload"]
         except Exception as error:
             raise ContextMiddlewareError(
@@ -132,7 +131,6 @@ class RedisAuthPlugin(AuthPlugin):
             redis_cache = await redis_handler.get(redis_key)
         else:
             redis_cache = await run_in_threadpool(redis_handler.get, redis_key)
-        # todo format user schema
         return redis_cache
 
     async def _get_redis_handler(self) -> Union[aioRedis, Redis]:
