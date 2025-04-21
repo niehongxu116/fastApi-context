@@ -1,6 +1,6 @@
 [project]
 name = "fastApi-context"
-version = "1.0.3"
+version = "1.0.4"
 description = "Auth check and more plugins for fastApi"
 authors = [
     {name = "hxnie",email = "920521013@qq.com"}
