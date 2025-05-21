@@ -92,7 +92,7 @@ class JwtAuthPlugin(AuthPlugin):
             payload = jwt.decode(
                 token, self.auth_plugin_config.jwt_secret, algorithms=self.auth_plugin_config.jwt_algorithms
             )
-            return payload["payload"]
+            return payload
         except Exception as error:
             raise ContextMiddlewareError(
                 status_code=self.auth_plugin_config.error_status_code,

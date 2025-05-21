@@ -1,4 +1,4 @@
-from typing import Optional, Union, Callable, Awaitable, Any
+from typing import Optional, Union, Callable, Awaitable, Any, Type
 
 from pydantic import BaseModel, Field
 from starlette.responses import Response, JSONResponse, PlainTextResponse
@@ -25,8 +25,8 @@ class ContextConfig(BaseModel):
     ContextConfig
     """
     plugins: list[Plugin] = Field(default=[], title="插件")
-    error_response: Union[JSONResponse, Response, PlainTextResponse] = JSONResponse
-    json_data_class: BaseModel = JsonResponseConfig
+    error_response: Type[Response] = JSONResponse
+    json_data_class: Type[BaseModel] = JsonResponseConfig
 
     class Config:
         arbitrary_types_allowed = True
