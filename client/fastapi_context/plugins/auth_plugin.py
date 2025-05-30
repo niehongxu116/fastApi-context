@@ -1,3 +1,4 @@
+import datetime
 import threading
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable
@@ -99,6 +100,15 @@ class JwtAuthPlugin(AuthPlugin):
                 error_code=self.auth_plugin_config.code,
                 message=f"token is invalid: {error}",
             )
+
+    def encrypt_token(self, payload: dict, seconds: int):
+        data = payload.copy()
+        data["exp"] = datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds)
+        return jwt.encode(
+            data,
+            self.auth_plugin_config.jwt_secret,
+            algorithm=self.auth_plugin_config.jwt_algorithms
+        )
 
 
 redis_client_init_lock = threading.Lock()
