@@ -49,7 +49,7 @@ class JWTAuthPluginConfig(AuthPluginConfig):
     jwt auth config
     """
     jwt_secret: str
-    jwt_algorithms: Union[str, list]
+    jwt_algorithms: Union[str, list] = "HS256"
 
 
 class RedisConfig(BaseModel):

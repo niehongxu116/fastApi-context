@@ -85,6 +85,7 @@ class AuthPlugin(Plugin):
 class JwtAuthPlugin(AuthPlugin):
 
     def __init__(self, auth_plugin_config: JWTAuthPluginConfig):
+        assert auth_plugin_config.jwt_algorithms and len(auth_plugin_config.jwt_algorithms) > 0
         super().__init__(auth_plugin_config=auth_plugin_config)
 
     async def check_token(self, request: Request) -> Any:
@@ -104,10 +105,12 @@ class JwtAuthPlugin(AuthPlugin):
     def encrypt_token(self, payload: dict, seconds: int):
         data = payload.copy()
         data["exp"] = datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds)
+        jwt_algorithms = self.auth_plugin_config.jwt_algorithms
+        algorithm = jwt_algorithms if isinstance(jwt_algorithms, str) else jwt_algorithms[0]
         return jwt.encode(
             data,
             self.auth_plugin_config.jwt_secret,
-            algorithm=self.auth_plugin_config.jwt_algorithms
+            algorithm=algorithm
         )
 
 
