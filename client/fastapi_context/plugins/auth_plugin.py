@@ -12,6 +12,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette_context.plugins import Plugin
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
+from starlette.routing import Match
 from starlette.types import Message
 
 from fastapi_context.config import ContextConfig, AuthPluginConfig, JWTAuthPluginConfig, RedisAuthPluginConfig
@@ -30,9 +31,11 @@ class AuthPlugin(Plugin):
         ...
 
     async def check_url_white_list(self, request: Request):
-        path = request.url.path
-        if path in self.auth_plugin_config.url_white_list:
-            return True
+        for route in request.app.routes:
+            if hasattr(route, "path_format") and route.path_format in self.auth_plugin_config.url_white_list:
+                match, _ = route.matches(request.scope)
+                if match == Match.FULL:
+                    return True
 
     async def enrich_response(self, arg: Union[Response, Message]) -> None:
         """Runs always on response."""
