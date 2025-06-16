@@ -25,10 +25,13 @@ provide SDK in the following programming languages:
 
 
 3. Configure plugins
-      
+
    1) JwtAuthPlugin
+        ```bash
+        pip install fastApi-context[jwt]
+        ```  
    + for JWT authentication you can use the `JwtAuthPlugin` plugin. This plugin allows you to configure JWT authentication for your FastAPI application.
-       ```py
+     ```py
       from fastapi_context.config import JWTAuthPluginConfig
       from fastapi_context.plugins.auth_plugin import JwtAuthPlugin
       
@@ -45,6 +48,9 @@ provide SDK in the following programming languages:
        ```
 
    2) RedisAuthPlugin
+        ```bash
+        pip install fastApi-context[redis]
+        ```  
    + for Redis authentication you can use the `RedisAuthPlugin` plugin. This plugin allows you to configure Redis authentication for your FastAPI application.
        ```py
       from fastapi_context.config import RedisConfig, RedisAuthPluginConfig

@@ -3,10 +3,6 @@ import threading
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable
 
-from jose import jwt
-from redis import Redis
-from redis.asyncio import BlockingConnectionPool
-from redis.asyncio.client import Redis as aioRedis
 from starlette._utils import is_async_callable
 from starlette.concurrency import run_in_threadpool
 from starlette_context.plugins import Plugin
@@ -17,6 +13,18 @@ from starlette.types import Message
 
 from fastapi_context.config import ContextConfig, AuthPluginConfig, JWTAuthPluginConfig, RedisAuthPluginConfig
 from fastapi_context.exceptions import ContextMiddlewareConfigError, ContextMiddlewareError
+
+
+try:
+    from jose import jwt
+except Exception:
+    pass
+
+try:
+    from redis.asyncio import BlockingConnectionPool
+    from redis.asyncio.client import Redis as aioRedis
+except Exception:
+    pass
 
 
 class AuthPlugin(Plugin):
@@ -88,6 +96,7 @@ class AuthPlugin(Plugin):
 class JwtAuthPlugin(AuthPlugin):
 
     def __init__(self, auth_plugin_config: JWTAuthPluginConfig):
+        assert jwt
         assert auth_plugin_config.jwt_algorithms and len(auth_plugin_config.jwt_algorithms) > 0
         super().__init__(auth_plugin_config=auth_plugin_config)
 
@@ -123,6 +132,7 @@ redis_client_init_lock = threading.Lock()
 class RedisAuthPlugin(AuthPlugin):
 
     def __init__(self, auth_plugin_config: RedisAuthPluginConfig):
+        assert aioRedis
         if auth_plugin_config.redis_client_function and not callable(auth_plugin_config.redis_client_function):
             raise ContextMiddlewareConfigError(
                 message="redis client must be callable",
@@ -149,7 +159,7 @@ class RedisAuthPlugin(AuthPlugin):
             redis_cache = await run_in_threadpool(redis_handler.get, redis_key)
         return redis_cache
 
-    async def _get_redis_handler(self) -> Union[aioRedis, Redis]:
+    async def _get_redis_handler(self):
         if self.redis_is_async:
             return await self.auth_plugin_config.redis_client_function()
         else:
