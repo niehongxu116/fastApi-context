@@ -1,6 +1,6 @@
 [project]
 name = "fastApi-context"
-version = "1.0.9"
+version = "1.1.0"
 description = "Auth check and more plugins for fastApi"
 authors = [
     {name = "hxnie",email = "920521013@qq.com"}
@@ -9,7 +9,8 @@ readme = "README.md"
 requires-python = ">=3.9,<4.0"
 dependencies = [
     "starlette (>=0.46.2,<0.47.0)",
-    "starlette-context (>=0.4.0,<0.5.0)"
+    "starlette-context (>=0.4.0,<0.5.0)",
+    "pydantic (>=2.0,<3.0)",
 ]
 
 
