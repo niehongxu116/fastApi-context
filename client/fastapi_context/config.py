@@ -6,6 +6,8 @@ from starlette_context.plugins import Plugin
 
 from fastapi_context.exceptions import ContextMiddlewareError
 
+from client.fastapi_context.const import CacheBrokerEnum
+
 
 class JsonResponseConfig(BaseModel):
     code: int = Field(default=0, title="code")
@@ -65,10 +67,35 @@ class RedisConfig(BaseModel):
     health_check_interval: int = Field(default=10, title="health check interval")
 
 
-class RedisAuthPluginConfig(AuthPluginConfig):
-    redis_token_key_prefix: str = Field(default="")
+class RedisItem(BaseModel):
     redis_client_function: Union[Callable, Awaitable, None] = None
     redis_config: Union[None, RedisConfig] = None
 
+
+class RedisAuthPluginConfig(RedisItem, AuthPluginConfig):
+    redis_token_key_prefix: str = Field(default="")
+
     class Config:
         arbitrary_types_allowed = True
+
+
+class UrlCacheItem(BaseModel):
+    url_router: str = Field(
+        title="url router",
+        description="cache all requests under this url, method must be GET, e.g.: /api/v1/",
+    )
+    cache_time: int = Field(default=3600 * 24, title="cache time in seconds")
+    cache_key_without_args: Union[str, None] = Field(
+        default="",
+        title="cache key",
+        description="designated key, if not set, will use the url and args as key"
+    )
+
+
+class CacheConfig(BaseModel):
+    broker: CacheBrokerEnum = Field(title="cache broker", default=CacheBrokerEnum.REDIS)
+    redis_config: Union[RedisItem, None] = Field(
+        title="redis config",
+        default=None,
+        description="redis config for cache, if broker is redis, this must be set"
+    )
