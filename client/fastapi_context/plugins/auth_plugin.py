@@ -11,7 +11,7 @@ from starlette.responses import Response
 from starlette.routing import Match
 from starlette.types import Message
 
-from fastapi_context.config import ContextConfig, AuthPluginConfig, JWTAuthPluginConfig, RedisAuthPluginConfig
+from fastapi_context.config import JWTAuthPluginConfig, RedisAuthPluginConfig
 from fastapi_context.exceptions import ContextMiddlewareConfigError, ContextMiddlewareError
 
 
@@ -23,6 +23,8 @@ except Exception:
 try:
     from redis.asyncio import BlockingConnectionPool
     from redis.asyncio.client import Redis as aioRedis
+
+    from fastapi_context.utils.redis_utils import RedisUtils
 except Exception:
     pass
 
@@ -144,7 +146,9 @@ class RedisAuthPlugin(AuthPlugin):
         super().__init__(auth_plugin_config=auth_plugin_config)
         if not self.auth_plugin_config.redis_client_function:
             with redis_client_init_lock:
-                self.redis_connection_pool = self._init_redis_connection_pool()
+                self.redis_connection_pool = RedisUtils.init_redis_connection_pool(
+                    redis_config=self.auth_plugin_config.redis_config, is_async=True
+                )
                 self.auth_plugin_config.redis_client_function = self._redis_client_function
 
         self.redis_is_async = is_async_callable(self.auth_plugin_config.redis_client_function)
